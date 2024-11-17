@@ -1,0 +1,46 @@
+-- Create Database
+CREATE DATABASE IF NOT EXISTS point_of_sale;
+
+-- Use the newly created database
+USE point_of_sale;
+
+-- Create Tables
+-- Cashier Accounts
+CREATE TABLE IF NOT EXISTS Cashier_Accounts (
+    cashier_id INT PRIMARY KEY AUTO_INCREMENT,
+    cashier_lname VARCHAR(20) NOT NULL,
+    login_username VARCHAR(30) NOT NULL,
+    login_password VARCHAR(255) NOT NULL
+);
+
+-- Products
+CREATE TABLE IF NOT EXISTS Products (
+    prod_id INT PRIMARY KEY AUTO_INCREMENT,
+    prod_name VARCHAR(50) NOT NULL,
+    prod_category VARCHAR(20) NOT NULL,
+    size_name VARCHAR(20) NOT NULL,
+    size_price DOUBLE NOT NULL
+);
+
+-- Invoices
+CREATE TABLE IF NOT EXISTS Invoice (
+    invoice_id INT PRIMARY KEY AUTO_INCREMENT,
+    invoice_date DATETIME NOT NULL,
+    cashier_id INT NOT NULL,
+    subtotal DOUBLE NOT NULL,
+    total_amount DOUBLE NOT NULL,
+    FOREIGN KEY (cashier_id) REFERENCES Cashier_Accounts(cashier_id)
+);
+
+-- Sales
+CREATE TABLE IF NOT EXISTS Sales (
+    sale_id INT PRIMARY KEY AUTO_INCREMENT,
+    invoice_id INT NOT NULL,
+    prod_id INT NOT NULL,
+    size_name VARCHAR(20) NOT NULL,
+    unit_price DOUBLE NOT NULL,
+    order_qty INT NOT NULL,
+    order_amount DOUBLE NOT NULL,
+    FOREIGN KEY (invoice_id) REFERENCES Invoice(invoice_id),
+    FOREIGN KEY (prod_id) REFERENCES Products(prod_id)
+);
